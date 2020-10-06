@@ -41,7 +41,9 @@ namespace Wox.Core.Plugin
             {
                 return DeserializedResult(output);
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception e)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
                 Log.Exception($"Exception when query <{query}>", e, GetType());
                 return null;
@@ -90,7 +92,8 @@ namespace Wox.Core.Plugin
 
                         if (!string.IsNullOrEmpty(result1.JsonRPCAction.Method))
                         {
-                            if (result1.JsonRPCAction.Method.StartsWith("Wox."))
+                            // Using InvariantCulture since this is a command line arg
+                            if (result1.JsonRPCAction.Method.StartsWith("Wox.", StringComparison.InvariantCulture))
                             {
                                 ExecuteWoxAPI(result1.JsonRPCAction.Method.Substring(4), result1.JsonRPCAction.Parameters);
                             }
@@ -98,9 +101,11 @@ namespace Wox.Core.Plugin
                             {
                                 string actionResponse = ExecuteCallback(result1.JsonRPCAction);
                                 JsonRPCRequestModel jsonRpcRequestModel = JsonConvert.DeserializeObject<JsonRPCRequestModel>(actionResponse);
+
+                                // Using InvariantCulture since this is a command line arg
                                 if (jsonRpcRequestModel != null
                                     && !string.IsNullOrEmpty(jsonRpcRequestModel.Method)
-                                    && jsonRpcRequestModel.Method.StartsWith("Wox."))
+                                    && jsonRpcRequestModel.Method.StartsWith("Wox.", StringComparison.InvariantCulture))
                                 {
                                     ExecuteWoxAPI(jsonRpcRequestModel.Method.Substring(4), jsonRpcRequestModel.Parameters);
                                 }
@@ -120,7 +125,7 @@ namespace Wox.Core.Plugin
             }
         }
 
-        private void ExecuteWoxAPI(string method, object[] parameters)
+        private static void ExecuteWoxAPI(string method, object[] parameters)
         {
             MethodInfo methodInfo = PluginManager.API.GetType().GetMethod(method);
             if (methodInfo != null)
@@ -191,7 +196,7 @@ namespace Wox.Core.Plugin
                                     }
                                 }
                             }
-                            else if (result.StartsWith("DEBUG:"))
+                            else if (result.StartsWith("DEBUG:", StringComparison.InvariantCulture))
                             {
                                 MessageBox.Show(new Form { TopMost = true }, result.Substring(6));
 

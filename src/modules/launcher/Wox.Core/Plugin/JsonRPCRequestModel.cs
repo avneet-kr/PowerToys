@@ -16,7 +16,11 @@
  *
  */
 
+using System;
+using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
+using Microsoft.VisualBasic;
 
 namespace Wox.Core.Plugin
 {
@@ -33,17 +37,20 @@ namespace Wox.Core.Plugin
             {
                 string parameters = Parameters.Aggregate("[", (current, o) => current + (GetParameterByType(o) + ","));
                 parameters = parameters.Substring(0, parameters.Length - 1) + "]";
-                rpc = string.Format(@"{{\""method\"":\""{0}\"",\""parameters\"":{1}", Method, parameters);
+
+                // Using InvariantCulture since this is a command line arg
+                rpc = string.Format(CultureInfo.InvariantCulture, @"{{\""method\"":\""{0}\"",\""parameters\"":{1}", Method, parameters);
             }
             else
             {
-                rpc = string.Format(@"{{\""method\"":\""{0}\"",\""parameters\"":[]", Method);
+                // Using InvariantCulture since this is a command line arg
+                rpc = string.Format(CultureInfo.InvariantCulture, @"{{\""method\"":\""{0}\"",\""parameters\"":[]", Method);
             }
 
             return rpc;
         }
 
-        private string GetParameterByType(object parameter)
+        private static string GetParameterByType(object parameter)
         {
             if (parameter == null)
             {
@@ -52,27 +59,31 @@ namespace Wox.Core.Plugin
 
             if (parameter is string)
             {
-                return string.Format(@"\""{0}\""", ReplaceEscapes(parameter.ToString()));
+                // Using InvariantCulture since this is a command line arg
+                return string.Format(CultureInfo.InvariantCulture, @"\""{0}\""", ReplaceEscapes(parameter.ToString()));
             }
 
             if (parameter is int || parameter is float || parameter is double)
             {
-                return string.Format(@"{0}", parameter);
+                // Using InvariantCulture since this is a command line arg
+                return string.Format(CultureInfo.InvariantCulture, @"{0}", parameter);
             }
 
             if (parameter is bool)
             {
-                return string.Format(@"{0}", parameter.ToString().ToLower());
+                // Using InvariantCulture since this is a command line arg
+                return string.Format(CultureInfo.InvariantCulture, @"{0}", parameter.ToString().ToLowerInvariant());
             }
 
             return parameter.ToString();
         }
 
-        private string ReplaceEscapes(string str)
+        private static string ReplaceEscapes(string str)
         {
-            return str.Replace(@"\", @"\\") // Escapes in ProcessStartInfo
-                .Replace(@"\", @"\\") // Escapes itself when passed to client
-                .Replace(@"""", @"\\""""");
+            // Using InvariantCulture since this is a command line arg
+            return str.Replace(@"\", @"\\", StringComparison.InvariantCulture) // Escapes in ProcessStartInfo
+                .Replace(@"\", @"\\", StringComparison.InvariantCulture) // Escapes itself when passed to client
+                .Replace(@"""", @"\\""""", StringComparison.InvariantCulture);
         }
     }
 }

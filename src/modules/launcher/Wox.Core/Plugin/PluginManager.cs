@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -201,7 +202,8 @@ namespace Wox.Core.Plugin
 
                 if (!string.IsNullOrEmpty(query.ActionKeyword))
                 {
-                    result.QueryTextDisplay = string.Format("{0} {1}", query.ActionKeyword, result.QueryTextDisplay);
+                    // Using InvariantCulture since this is a command line arg
+                    result.QueryTextDisplay = string.Format(CultureInfo.InvariantCulture, "{0} {1}", query.ActionKeyword, result.QueryTextDisplay);
                 }
             }
 
