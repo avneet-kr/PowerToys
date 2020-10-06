@@ -72,7 +72,7 @@ namespace Wox.Core.Plugin
             if (parameter is bool)
             {
                 // Using InvariantCulture since this is a command line arg
-                return string.Format(CultureInfo.InvariantCulture, @"{0}", parameter.ToString().ToLowerInvariant());
+                return string.Format(CultureInfo.InvariantCulture, @"{0}", parameter.ToString().ToUpperInvariant());
             }
 
             return parameter.ToString();
