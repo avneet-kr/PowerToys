@@ -61,7 +61,9 @@ namespace Wox.Core.Plugin
                 // return DeserializedResult(output);
                 throw new NotImplementedException();
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception e)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
                 Log.Exception($"THIS IS A BUG - Exception on result <{selectedResult}>", e, GetType());
                 return null;
@@ -216,7 +218,9 @@ namespace Wox.Core.Plugin
                     }
                 }
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception e)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
                 Log.Exception($"Exception for filename <{startInfo.FileName}> with argument <{startInfo.Arguments}>", e, GetType());
 
