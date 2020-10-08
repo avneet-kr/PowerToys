@@ -23,6 +23,11 @@ namespace Wox.Core.Plugin
     /// </summary>
     public class JsonRPCServerRequestModel : JsonRPCRequestModel
     {
+        public JsonRPCServerRequestModel(object[] parameters)
+            : base(parameters)
+        {
+        }
+
         public override string ToString()
         {
             string rpc = base.ToString();

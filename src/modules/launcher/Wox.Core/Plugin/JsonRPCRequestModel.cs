@@ -17,23 +17,30 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.VisualBasic;
 
 namespace Wox.Core.Plugin
 {
     public class JsonRPCRequestModel : JsonRPCModelBase
     {
+        public JsonRPCRequestModel(object[] parameters)
+        {
+            Parameters = new ReadOnlyCollection<object>(parameters);
+        }
+
         public string Method { get; set; }
 
-        public object[] Parameters { get; set; }
+        public ReadOnlyCollection<object> Parameters { get; private set; }
 
         public override string ToString()
         {
             string rpc = string.Empty;
-            if (Parameters != null && Parameters.Length > 0)
+            if (Parameters != null && Parameters.Count > 0)
             {
                 string parameters = Parameters.Aggregate("[", (current, o) => current + (GetParameterByType(o) + ","));
                 parameters = parameters.Substring(0, parameters.Length - 1) + "]";

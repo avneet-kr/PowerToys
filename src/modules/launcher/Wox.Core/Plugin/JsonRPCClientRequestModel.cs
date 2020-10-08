@@ -23,6 +23,11 @@ namespace Wox.Core.Plugin
     /// </summary>
     public class JsonRPCClientRequestModel : JsonRPCRequestModel
     {
+        public JsonRPCClientRequestModel(object[] parameters)
+            : base(parameters)
+        {
+        }
+
         public bool DontHideAfterAction { get; set; }
 
         public override string ToString()

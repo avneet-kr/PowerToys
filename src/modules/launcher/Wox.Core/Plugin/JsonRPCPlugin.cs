@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Newtonsoft.Json;
@@ -97,7 +98,7 @@ namespace Wox.Core.Plugin
                             // Using InvariantCulture since this is a command line arg
                             if (result1.JsonRPCAction.Method.StartsWith("Wox.", StringComparison.InvariantCulture))
                             {
-                                ExecuteWoxAPI(result1.JsonRPCAction.Method.Substring(4), result1.JsonRPCAction.Parameters);
+                                ExecuteWoxAPI(result1.JsonRPCAction.Method.Substring(4), result1.JsonRPCAction.Parameters.ToArray());
                             }
                             else
                             {
@@ -109,7 +110,7 @@ namespace Wox.Core.Plugin
                                     && !string.IsNullOrEmpty(jsonRpcRequestModel.Method)
                                     && jsonRpcRequestModel.Method.StartsWith("Wox.", StringComparison.InvariantCulture))
                                 {
-                                    ExecuteWoxAPI(jsonRpcRequestModel.Method.Substring(4), jsonRpcRequestModel.Parameters);
+                                    ExecuteWoxAPI(jsonRpcRequestModel.Method.Substring(4), jsonRpcRequestModel.Parameters.ToArray());
                                 }
                             }
                         }

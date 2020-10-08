@@ -27,10 +27,9 @@ namespace Wox.Core.Plugin
 
         protected override string ExecuteQuery(Query query)
         {
-            JsonRPCServerRequestModel request = new JsonRPCServerRequestModel
+            JsonRPCServerRequestModel request = new JsonRPCServerRequestModel(new object[] { query.Search })
             {
                 Method = "query",
-                Parameters = new object[] { query.Search },
             };
 
             _startInfo.Arguments = $"\"{request}\"";
@@ -46,10 +45,9 @@ namespace Wox.Core.Plugin
 
         protected override string ExecuteContextMenu(Result selectedResult)
         {
-            JsonRPCServerRequestModel request = new JsonRPCServerRequestModel
+            JsonRPCServerRequestModel request = new JsonRPCServerRequestModel(new object[] { selectedResult.ContextData })
             {
                 Method = "contextmenu",
-                Parameters = new object[] { selectedResult.ContextData },
             };
 
             _startInfo.Arguments = $"\"{request}\"";
