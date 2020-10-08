@@ -201,7 +201,9 @@ namespace Wox.Core.Plugin
                             }
                             else if (result.StartsWith("DEBUG:", StringComparison.InvariantCulture))
                             {
-                                MessageBox.Show(new Form { TopMost = true }, result.Substring(6));
+                                Form form = new Form { TopMost = true };
+                                MessageBox.Show(form, result.Substring(6));
+                                form.Dispose();
 
                                 return string.Empty;
                             }
